@@ -1,0 +1,1 @@
+# serverless_embedding_automation_pinecone
