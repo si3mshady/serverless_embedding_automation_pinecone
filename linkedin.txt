@@ -1,0 +1,5 @@
+Well hello there. 
+I'm Elliott.
+I will show you how to automate the insertion of new data into a Pinecone vector database 
+using AWS Lambda. 
+

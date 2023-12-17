@@ -1,0 +1,3 @@
+The Third Time is a charm. 
+
+This technology can be used to automate the insertion of domain knowledge into your RAG application

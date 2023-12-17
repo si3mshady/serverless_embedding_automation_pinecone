@@ -3,21 +3,19 @@ from transformers import AutoModel, AutoTokenizer
 import torch
 import pinecone      
 
-
-pinecone.init( api_key='be794e59-a8e4-4081-a5ce-530689e82e40', environment='gcp-starter')
-
 tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 
-index = pinecone.Index('pipeline')
-
-# Get statistics about the index
-res = index.describe_index_stats()
-vector_count = res.get('total_vector_count')
 
 
 def handler(event, context):
     print(event)
+    pinecone.init( api_key='b0', environment='gcp-starter')
+    # Get statistics about the index
+    index = pinecone.Index('pipeline')
+    res = index.describe_index_stats()
+    vector_count = res.get('total_vector_count')
+    
     s3 = boto3.client('s3')
     bucket_name = event['Records'][0]['s3']['bucket']['name']
     object_key = event['Records'][0]['s3']['object']['key']
