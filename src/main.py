@@ -1,15 +1,20 @@
-import json, boto3 
+import json, boto3
 from transformers import AutoModel, AutoTokenizer
 import torch
 import pinecone      
 
 
-pinecone.init( api_key='', environment='gcp-starter')
+pinecone.init( api_key='be794e59-a8e4-4081-a5ce-530689e82e40', environment='gcp-starter')
 
 tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 
 index = pinecone.Index('pipeline')
+
+# Get statistics about the index
+res = index.describe_index_stats()
+vector_count = res.get('total_vector_count')
+
 
 def handler(event, context):
     print(event)
@@ -37,9 +42,9 @@ def handler(event, context):
     upsert_response = index.upsert(
     vectors=[
         {
-            'id': 'si3mshady',
+            'id': str(int(vector_count) + 1),
             'values': embedding[0].tolist(),
-            'metadata': {'original_text': sentences[0]}
+            'metadata': {'original_text': str(content)}
         }
     ],
     namespace='example-namespace'
@@ -50,3 +55,4 @@ def handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Here are your encoded inputs!  ' +  str(encoded_input))
     }
+
