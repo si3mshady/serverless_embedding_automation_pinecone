@@ -1,4 +1,4 @@
-import json, boto3 
+import json
 from transformers import AutoModel, AutoTokenizer
 import torch
 import pinecone      
