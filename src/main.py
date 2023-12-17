@@ -7,7 +7,6 @@ tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v
 model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 
 
-
 def handler(event, context):
     print(event)
     pinecone.init( api_key='b0', environment='gcp-starter')
