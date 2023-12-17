@@ -1,5 +1,0 @@
-That was cool right?
-
-
-Vector databases are what provides much of the power behind AI applications especially those that need to retrieve 
-data that exceeds the information the LLM was trained on.
