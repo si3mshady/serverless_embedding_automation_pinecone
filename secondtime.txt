@@ -1,0 +1,10 @@
+Wasnt that fun?
+
+Vector databases are used heavily with RAG applicaitons.
+These applicaitons work with large language models and help deliver context to a chatbot 
+that the language model was not previously trained on.
+
+
+Welp, that's it for the demo.
+
+Untill next time!

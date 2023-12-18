@@ -1,0 +1,8 @@
+Hello there!
+
+My name is Elliott. In this demo I will show you how to use AWS Lambda and S3 to automate the insertion of 
+data from documents into a PINECONE vector database.
+
+Are you ready to see?
+
+Lets go!

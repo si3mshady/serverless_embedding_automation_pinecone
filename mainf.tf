@@ -32,13 +32,17 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_ecr_repository" "genai-automated-deployments-data" {
-  name = var.ecr_repository_name
-}
 
 resource "aws_ecr_repository" "genai-automated-deployments" {
   name = var.ecr_repository_name
+  force_delete = true
 }
+
+data "aws_ecr_repository" "genai-automated-deployments-data" {
+  depends_on = [ aws_ecr_repository.genai-automated-deployments ]
+  name = var.ecr_repository_name
+}
+
 
 module "ecr_docker_build" {
   source            = "github.com/onnimonni/terraform-ecr-docker-build-module"
@@ -50,7 +54,7 @@ module "ecr_docker_build" {
 
 resource "aws_lambda_function" "genai-pinecone-automation-v2" {
   function_name = var.lambda_function_name
-  timeout       = 90 # seconds
+  timeout       = 180 # seconds
   image_uri     = "${data.aws_ecr_repository.genai-automated-deployments-data.repository_url}:${var.docker_image_tag}"
   package_type  = "Image"
   role          = aws_iam_role.genai-assume-role-lambda.arn
@@ -58,6 +62,7 @@ resource "aws_lambda_function" "genai-pinecone-automation-v2" {
   environment {
     variables = {
       ENVIRONMENT = var.environment
+      TRANSFORMERS_CACHE = "/tmp"
     }
   }
 }
@@ -75,6 +80,22 @@ resource "aws_iam_role" "genai-assume-role-lambda" {
         }
       },
     ]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_policy" {
+  name   = "lambda_policy"
+  role   = aws_iam_role.genai-assume-role-lambda.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "lambda:*", // Specify the necessary actions
+        Resource = "*" // Specify the necessary resources
+      },
+      // Add more statements as needed
+    ],
   })
 }
 
